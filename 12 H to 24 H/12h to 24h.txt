@@ -1,0 +1,65 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+int convertoint(char* hstring)
+{
+    int i, part[2];
+    for(i=0 ; i<2 ; i++)
+    {
+        if(hstring[i] == 48 )
+            part[i]= 0;
+        if(hstring[i] == 49 )
+            part[i]= 1;
+        if(hstring[i] == 50 )
+            part[i]= 2;
+        if(hstring[i] == 51 )
+            part[i]= 3;
+        if(hstring[i] == 52 )
+            part[i]= 4;
+        if(hstring[i] == 53 )
+            part[i]= 5;
+        if(hstring[i] == 54 )
+            part[i]= 6;
+        if(hstring[i] == 55 )
+            part[i]= 7;
+        if(hstring[i] == 56 )
+            part[i]= 8;
+        if(hstring[i] == 57 )
+            part[i]= 9;
+        
+        
+    }
+        
+         part[0] = part[0]*10 ;
+        return (part[0] + part[1]); 
+}
+int main()
+{
+    char inputTime[10], hstring[2], mstring[2], sstring[2], meridian[2];
+    cin >> inputTime;
+    hstring[0] = inputTime[0];
+    hstring[1] = inputTime[1];
+    mstring[0] = inputTime[3];
+    mstring[1] = inputTime[4];
+    sstring[0] = inputTime[6];
+    sstring[1] = inputTime[7];
+    meridian[0] = inputTime[8];
+    meridian[1] = inputTime[9];
+    int hh = convertoint(hstring);
+    
+    if( hh==12 && meridian[0] == 'P' && meridian[1] == 'M')
+    {  hh = hh ;  }
+    else if( hh==12 && meridian[0] == 'A' && meridian[1] == 'M')
+    {   hh = 0;   }
+    else if(meridian[0] == 'P' && meridian[1] == 'M')
+    {   hh = hh + 12;   }
+   // cout<<hh<<":"<<mstring<<":"<<sstring ;
+    
+    
+    if(hh < 10)
+    { cout<<"0";
+    }
+    cout<<hh<<":"<<mstring[0]<<mstring[1]<<":"<<sstring[0]<<sstring[1];
+    return 0;
+}
+   

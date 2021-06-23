@@ -1,0 +1,47 @@
+#include<iostream>
+using namespace std;
+
+void leftShift(int* arr, int shiftBy, int numOfElements)
+{   int i, j, breakpoint;
+    int temp[shiftBy];
+    breakpoint = numOfElements - shiftBy ;
+    for (i=0 ; i<shiftBy ; i++)
+    {
+        temp[i] = arr[i];
+    }
+    for(i=0 ; i < breakpoint ; i++)
+    {
+        arr[i] = arr[i + shiftBy];
+    }
+    
+    for (j=0 ; j<shiftBy ; j++)
+    {
+        arr [i] = temp[j];
+        i++;
+    }
+    for(i=0 ; i<numOfElements ; i++)
+    {
+        cout<<arr[i];
+        cout<<" ";
+    }
+    
+}
+
+int main()
+{
+    int numOfElements, shiftBy, i;
+    cin>>numOfElements ;
+    cin>>shiftBy ;
+    int arr[numOfElements];
+    
+    for(i=0 ; i< numOfElements ; i++)
+    {
+        cin>>arr[i];
+    }
+    
+    leftShift(arr, shiftBy, numOfElements) ;
+    return 0;
+    
+    
+}
+

@@ -1,0 +1,130 @@
+#include <iostream>
+#include<fstream>
+using namespace std;
+
+class medicine
+{  int id;
+   char name[20];
+   char supplier[20];
+   char company[20];
+   float price;
+   public:
+    medicine();
+    void getDetails();
+    void printDetails();
+    friend void readData(void);
+
+};
+std::ofstream file,numFile;
+std::ifstream file1,numFile1;
+inline medicine::medicine()
+{
+
+        id=0;
+
+        price=0;
+
+}
+inline void medicine::getDetails()
+{
+
+        cout<<"Enter medicine ID\n";
+        cin>>id;
+        cout<<"Enter medicine name\n";
+        fflush(stdin);
+        gets(name);
+        cout<<"Enter medicine company name\n";
+        fflush(stdin);
+        gets(company);
+        cout<<"Enter medicine supplier name\n";
+        fflush(stdin);
+        gets(supplier);
+        cout<<"Enter the medicine price\n";
+        cin>>price;
+}
+inline void medicine::printDetails()
+{    cout<<"\nmedicine id "<<id;
+     cout<<"\nmedicine name "<<name;
+     cout<<"\nmedicine company "<<company;
+     cout<<"\nmedicine supplier "<<supplier;
+     cout<<"\nmedicine price "<<price;
+}
+inline int readNum()
+{    int num;
+     numFile1.open("number.txt",ios::in);
+    numFile1 >> num;
+    if (num==-2)
+    {
+       return 0;
+    }
+    return num;
+}
+/*medicine* readData(medicine *ptr,int num)
+{
+     file1.open("random.txt",ios::in);
+      file1.read((char*)&med,sizeof(med));
+
+}*/
+
+int main()
+{   int i,opt,num,cont;
+
+   num = readNum();
+   medicine med[num+1];
+
+file1.open("random.txt",ios::in);
+      file1.read((char*)&med,sizeof(med));
+
+  do{
+   cout<<"Select operation\n1.Add medicine\n2.Search medicine\n3.print all medicines\n4.Delete medicine\n";
+   cin>> opt;
+   switch(opt)
+   {
+   case 1:
+        med[num].getDetails();
+        file.open("random.txt",ios::out);
+        if(!file)
+        {
+           cout<<"Error creating the file";
+        }
+        file.write((char*)&med,sizeof(med));
+        file.close();
+        num++;
+        numFile.open("number.txt",ios::out);
+        numFile << num;
+        numFile.close();
+        break;
+
+   case 2:
+       cout<<"\n no data avaailable";
+       break;
+   case 3:
+      if (num==0)
+      {
+          cout<<"No medicines available\n";
+          return 0;
+      }
+      file1.open("random.txt",ios::in);
+      file1.read((char*)&med,sizeof(med));
+      for (i=0 ; i<num;i++)
+      {
+          med[i].printDetails();
+          cout<<"\n";
+      }
+       break;
+
+   }
+
+     cout<<"Press 1 to continue\n";
+     cin>>cont;
+    /*    numFile.open("number.txt",ios::out);
+        numFile << 0;
+        numFile.close();*/
+
+  }while(cont==1);
+
+   return 0;
+
+
+}
+

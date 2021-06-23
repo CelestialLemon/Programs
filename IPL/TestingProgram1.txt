@@ -1,0 +1,301 @@
+using System;
+
+namespace IPL
+{
+    class Team
+    {
+        public int teamNumber;
+        public string teamName;
+        public int points;
+
+        
+
+    }
+
+    class Match
+    {
+        public int matchNumber = 0;              //number of the match
+        public string team0;                 //name of team competing
+        public string team1;                 //name of other team competing, eg if match is RCB vs KKR, team0 = "RCB", team1 = "KKR"
+        public int team0Number;
+        public int team1Number;
+        public string winnerName;                //name of the team that won the match
+        public int winnerTeamNumber;
+
+        
+    }
+    class Program
+    {
+
+        //array variables
+        static int[] binaryRepArray = new int[15];
+        static Team[] teams = new Team[6];
+        static Match[] match = new Match[15];
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("6 teams participate in the league, please enter their names:");
+            SetArrayObjectsToNonNull();
+            SetTeamNames();
+            PrintNamesOfTeams();
+            SetFixtures();
+            PrintFixtures();
+
+            int input;
+            string cont;
+
+            do
+            {
+                Console.WriteLine("Select one of the following\n1.Procedural simulation\n2.Random simulation");
+                input = Convert.ToInt32(Console.ReadLine());
+                Console.Clear();
+                switch (input)
+                {
+                    case 1:
+                        ProceduralSimulation();
+                        break;
+
+                    case 2:
+                        RandomSimulation();
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid input");
+                        break;
+                }
+
+                Console.WriteLine("Simulate again? (y/n)");
+                cont = Console.ReadLine();
+
+
+            } while (cont == "y" || cont == "Y");
+
+              Console.ReadLine();
+        }
+
+        static void SetArrayObjectsToNonNull()
+        {
+           
+           
+
+            for (int i = 0; i < 6; i++)
+            {
+                Team tempTeam = new Team();
+                tempTeam.points = 0;
+                teams[i] = tempTeam;
+            }
+
+            for (int i = 0; i < 15; i++)
+            {
+                Match tempMatch = new Match();
+                match[i] = tempMatch;
+            }
+        }
+
+        /*static void GetTeamNames()
+        {
+            //Gets the input of team names from the user
+
+            
+            Console.Write("Team 1: ");
+            teams[0].teamName = Console.ReadLine();
+            teams[0].teamNumber = 0;
+            
+            Console.Write("Team 2: ");
+            teams[1].teamName = Console.ReadLine();
+            teams[1].teamNumber = 1;
+
+            Console.Write("Team 3: ");
+            teams[2].teamName = Console.ReadLine();
+            teams[2].teamNumber = 2;
+
+            Console.Write("Team 4: ");
+            teams[3].teamName = Console.ReadLine();
+            teams[3].teamNumber = 3;
+
+            Console.Write("Team 5: ");
+            teams[4].teamName = Console.ReadLine();
+            teams[4].teamNumber = 4;
+
+            Console.Write("Team 6: ");
+            teams[5].teamName = Console.ReadLine();
+            teams[5].teamNumber = 5;
+
+
+        }*/
+
+        static void SetTeamNames()
+        {
+            //Gets the input of team names from the user
+
+
+
+            teams[0].teamName = "RCB";
+            teams[0].teamNumber = 0;
+
+            teams[1].teamName = "CSK";
+            teams[1].teamNumber = 1;
+
+            teams[2].teamName = "MI";
+            teams[2].teamNumber = 2;
+
+            teams[3].teamName = "SRH";
+            teams[3].teamNumber = 3;
+
+            teams[4].teamName = "RR";
+            teams[4].teamNumber = 4;
+
+            teams[5].teamName = "KKR";
+            teams[5].teamNumber = 5;
+
+        }
+
+        static void PrintNamesOfTeams()
+        {
+            for (int i = 0; i < 6; i++)
+            {
+
+            }
+        }
+
+        static void SetFixtures()
+        {
+            int matchNumber = 0;
+            //as there are 6 teams from 0-5, 0th team will go against 1-5, 1st team will go against 2-5 and so on. so 4th team will go against 5th and the fixtures end there
+            for (int i = 0; i < 5; i++)                     //i will go till 4 as the matches for 5th team will be fixed already by that time. 
+            {
+                for (int j = i + 1; j < 6; j++)                    //j will go till 5 as every team will go against 5th team as well. like 0-1,0-2....0-5. for team 1, 1-2, 1-3......1-5
+                {
+                    match[matchNumber].team0 = (teams[i].teamName);
+                    match[matchNumber].team1 = (teams[j].teamName);
+                    match[matchNumber].team0Number = (teams[i].teamNumber);
+                    match[matchNumber].team1Number = (teams[j].teamNumber);
+
+                    matchNumber++;
+                }
+            }
+        }
+
+        static void PrintFixtures()
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                Console.WriteLine("Match {0}: {1} vs {2}", i + 1, match[i].team0, match[i].team1);
+            }
+        }
+
+        static void ProceduralSimulation()
+        {
+            int numberOfSimulations = 32768;               //for 15 matches there are 32678 possible outcomes so we simulate all of them and this number indicates which one is being simulated.
+            
+            for(int i=0; i<6; i++)
+            {
+                teams[i].points = 0;
+            }
+            
+            for (int i = 0; i < numberOfSimulations; i++)
+            {
+            
+                SimulateOneOutcome(ConvertToBinary(i));
+
+            }
+
+            Console.WriteLine("{0} outcomes have been simulated", numberOfSimulations);
+            for(int i=0; i<6; i++)
+            {
+                Console.WriteLine("Team #{0} {1} average {2} points", teams[i].teamNumber, teams[i].teamName, (float)teams[i].points / numberOfSimulations);
+            }
+        }
+
+
+        static void RandomSimulation()
+        {
+            int numOfSimulations;
+            Console.Write("Enter the number simulations you want to perform: ");
+            numOfSimulations = Convert.ToInt32(Console.ReadLine());
+
+            int[] matchWinArray = new int[15];
+            Random myRandom = new Random();
+
+            for (int i = 0; i < 6; i++)
+            {
+                teams[i].points = 0;
+            }
+
+            for (int i=0; i<numOfSimulations; i++)
+            {
+                for(int j=0; j<15; j++)
+                {
+                    matchWinArray[j] = myRandom.Next(2);
+                }
+
+                SimulateOneOutcome(matchWinArray);
+            }
+
+            Console.WriteLine("{0} outcomes have been simulated");
+            for (int i = 0; i < 6; i++)
+            {
+                Console.WriteLine("Team #{0} {1} average {2} points", teams[i].teamNumber, teams[i].teamName, (float)teams[i].points / numOfSimulations);
+            }
+        }
+
+
+        static void SimulateOneOutcome(int[] matchWinArray)
+        {
+            for(int i=0; i<15; i++)
+            {
+                if(matchWinArray[i] == 0)
+                {
+                    match[i].winnerName = match[i].team0;
+                    match[i].winnerTeamNumber = match[i].team0Number;
+                    teams[match[i].winnerTeamNumber].points += 2;
+                    //granting points to winning team
+
+
+                }
+
+                if(matchWinArray[i] == 1)
+                {
+                    match[i].winnerName = match[i].team1;
+                    match[i].winnerTeamNumber = match[i].team1Number;
+                    teams[match[i].winnerTeamNumber].points += 2;
+                }
+
+                
+            }
+
+           
+        }
+
+        static int[] ConvertToBinary(int number)
+        {
+
+
+
+            for (int i = 0; i < 15; i++)
+            {
+                binaryRepArray[i] = 0;                  //set initial values of the binary array to 0
+            }
+
+            for (int i = 0; i < 15; i++)
+            {
+                binaryRepArray[i] = number % 2;             //converts the given number to binary by human divison and remainder method
+                number /= 2;
+
+                if (number <= 0)                                //breaks the loop if the number is already fully converted as no further divison is required beyond zero
+                    break;
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                int temp;
+                temp = binaryRepArray[i];                        //as the converted array is in reversed form we need to reverse it again
+                binaryRepArray[i] = binaryRepArray[14 - i];
+                binaryRepArray[14 - i] = temp;
+            }
+
+            return binaryRepArray;
+
+        }
+    }
+}

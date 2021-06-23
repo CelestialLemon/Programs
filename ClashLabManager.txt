@@ -1,0 +1,139 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+
+namespace ClashLabManager
+{
+
+    class Level
+    {
+        int level;
+        int upgradeCost;
+        int upgradeTime;
+
+        public void getNewLevelInfo()
+        {
+            Console.WriteLine("Enter upgrade cost for the new level: ");
+            Console.WriteLine("Enter upgrade cost for the new level: ");
+            upgradeCost = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter upgrade duration in days: ");
+            upgradeTime = Convert.ToInt32(Console.ReadLine());
+        }
+    }
+
+    class Program
+    {
+       static Dictionary<string, Dictionary<int, Level>> Troops = new Dictionary<string, Dictionary<int, Level>>();
+        static void Main(string[] args)
+        {
+
+
+            ReadFromFile();
+            
+            int opt;
+            bool cont = false;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Choose Operation:\n1.Add new troop\n2.Add new level\n3.Print number of troops\n4.Print troop levels");
+                opt = Convert.ToInt32(Console.ReadLine());
+                switch (opt)
+                {
+                    case 1:
+                        AddNewTroop();
+                        break;
+
+                    case 2:
+                        AddNewLevel();
+                        break;
+
+                    case 3:
+                        printTroopsCount();
+                        break;
+
+                    case 4:
+                        printLevelCount();
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid Input, exiting program now....");
+                        break;
+                }
+
+                Console.WriteLine("Do you want to continue (y\\n)");
+                string input = Console.ReadLine();
+                if (input == "y")
+                    cont = true;
+                else
+                    cont = false;
+            } while (cont);
+
+            //all operations done
+            WriteToFile();
+            
+        }
+
+        static public void AddNewTroop()
+        {
+            Console.WriteLine("Enter the name of the troop: ");
+            string newTroopName = Console.ReadLine();
+            Dictionary<int, Level> newTroopDictionary = new Dictionary<int, Level>();
+            Troops.Add(newTroopName, newTroopDictionary);
+        }
+
+        static public void AddNewLevel()
+        {
+            string troopName;
+            Console.WriteLine("Enter troop name: ");
+            troopName = Console.ReadLine();
+            Level newLevel = new Level();
+            newLevel.getNewLevelInfo();
+            Troops[troopName].Add(Troops[troopName].Count, newLevel);
+            
+        }
+
+        static public void printTroopsCount()
+        { 
+            
+            Console.WriteLine("Current number of troops in database is {0}", Troops.Count);
+        }
+
+        static public void printLevelCount()
+        {
+            Console.WriteLine("Enter name of troop: ");
+            string troopName = Console.ReadLine();
+            int levelCount = Troops[troopName].Count;
+            Console.WriteLine("The number of levels of {0} is {1}", troopName, levelCount);
+        }
+
+        static void ReadFromFile()
+        {
+            bool fileAvailable = File.Exists("E:\\Repos\\Projects\\ClashLabManager\\Data\\playerdata.txt");
+            if (fileAvailable)
+            {
+                if (new FileInfo("E:\\Repos\\Projects\\ClashLabManager\\Data\\playerdata.txt").Length == 0)
+                {
+                    //file empty do nothing
+                }
+                else
+                {
+                    Troops = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, Level>>>
+                        (File.ReadAllText("E:\\Repos\\Projects\\ClashLabManager\\Data\\playerdata.txt"));
+
+                }
+            }
+            else
+            {
+                File.Create("E:\\Repos\\Projects\\ClashLabManager\\Data\\playerdata.txt");
+            }
+        }
+
+        static void WriteToFile()
+        {
+            string writerString = JsonConvert.SerializeObject(Troops);
+            File.WriteAllText("E:\\Repos\\Projects\\ClashLabManager\\Data\\playerdata.txt", writerString);
+        }
+    }
+}

@@ -1,0 +1,86 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+void main()
+{
+    int n,i,m=10,j,m1=10;
+     char a[60], input[60];
+     printf("Enter medicine to be searched\n");
+     scanf("%s",input);
+     FILE *fp21;
+     fp21 = fopen ("medical1.txt","r");
+      for (j=0 ; j<1400 ; j++)
+{
+        for (i=0 ; i<59 ; i++)
+  {            if (m==10)
+               {
+                    a[i] = getc(fp21);
+
+                    if (a[i]=='\n' || a[i] == 45)
+                     m=20;
+               }
+               if(m==20)
+               {
+                 a[i]=0;
+               }
+  }
+   n =  strcmp(input,a);
+      if (n==0)
+      {
+          printf("Medicine found\n");
+          m1=56;
+          break;
+      }
+
+       m=10;
+}
+   if (m1==10)
+   {
+    printf("medicine not found\n");
+    exit(0);
+   }
+
+  for (j=1 ; j<7 ; j++)
+  {
+      switch (j)
+      {
+      case 1:
+        printf("Medicine ID: ");
+        break;
+      case 2:
+        printf("Name of company: ");
+        break;
+      case 3:
+        printf("Supplier: ");
+        break;
+      case 4:
+        printf("Use: ");
+        break;
+      case 5:
+        printf("Shelf life: ");
+        break;
+      case 6:
+        printf("Price: ");
+        break;
+      }
+          m=10;
+        for (i=0 ; i<59 ; i++)
+  {            if (m==10)
+               {
+                    a[i] = getc(fp21);
+
+                    if (a[i]=='\n' || a[i] == 45)
+                     m=20;
+               }
+               if(m==20)
+               {
+                 a[i]=0;
+               }
+
+
+  }
+          printf("%s\n",&a);
+
+
+
+}
